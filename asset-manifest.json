@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/simon-says-game/static/css/main.819b4f92.css",
+    "main.js": "/simon-says-game/static/js/main.71a0c87e.js",
+    "static/js/453.dd11f917.chunk.js": "/simon-says-game/static/js/453.dd11f917.chunk.js",
+    "index.html": "/simon-says-game/index.html",
+    "main.819b4f92.css.map": "/simon-says-game/static/css/main.819b4f92.css.map",
+    "main.71a0c87e.js.map": "/simon-says-game/static/js/main.71a0c87e.js.map",
+    "453.dd11f917.chunk.js.map": "/simon-says-game/static/js/453.dd11f917.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.819b4f92.css",
+    "static/js/main.71a0c87e.js"
+  ]
+}
