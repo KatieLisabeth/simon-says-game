@@ -13,14 +13,21 @@ const App: React.FC = () => {
   const [activeTile, setActiveTile] = useState<string | null>(null);
   const [message, setMessage] = useState('Press Start to begin!');
   const [isGameOver, setIsGameOver] = useState(false);
+  const [clickCount, setClickCount] = useState(0);
+  const [requiredClicks, setRequiredClicks] = useState(0);
+  const [showLastSequence, setShowLastSequence] = useState(false);
 
 
   const startGame = () => {
-    setGameSequence([getRandomColor()]);
+    const newSequence = [getRandomColor()];
+    setGameSequence(newSequence);
     setPlayerSequence([]);
     setIsPlayerTurn(false);
     setMessage('Watch the sequence!');
     setIsGameOver(false);
+    setClickCount(0);
+    setRequiredClicks(newSequence.length);
+    setShowLastSequence(false);
   };
 
 
@@ -42,9 +49,11 @@ const App: React.FC = () => {
     }
   }, [gameSequence, isPlayerTurn]);
 
- 
+
   const handleTileClick = (color: string) => {
     if (!isPlayerTurn || isGameOver) return;
+
+    setClickCount(clickCount + 1);
 
     const newPlayerSequence = [...playerSequence, color];
     setPlayerSequence(newPlayerSequence);
@@ -53,14 +62,19 @@ const App: React.FC = () => {
     if (newPlayerSequence[currentIndex] !== gameSequence[currentIndex]) {
       setMessage('Game Over! You clicked the wrong tile.');
       setIsGameOver(true);
+      setShowLastSequence(true);
       return;
     }
+
 
     if (newPlayerSequence.length === gameSequence.length) {
       setMessage('Well done! Watch the next sequence.');
       setIsPlayerTurn(false);
       setPlayerSequence([]);
-      setGameSequence([...gameSequence, getRandomColor()]);
+      const newSequence = [...gameSequence, getRandomColor()];
+      setGameSequence(newSequence);
+      setClickCount(0);
+      setRequiredClicks(newSequence.length);
     }
   };
 
@@ -68,6 +82,19 @@ const App: React.FC = () => {
     <div className="App">
       <h1>Simon Says Game</h1>
       <p>{message}</p>
+
+      {/* Only show the last sequence after game over */}
+      {isGameOver && showLastSequence && (
+        <div className="sequence">
+          <strong>Last Sequence:</strong>{' '}
+          {gameSequence.map((color, index) => (
+            <span key={index} style={{ color, fontWeight: 'bold', marginRight: '5px' }}>
+              {color}
+            </span>
+          ))}
+        </div>
+      )}
+
       <div className="tiles">
         {colors.map((color) => (
           <Tile
@@ -78,8 +105,14 @@ const App: React.FC = () => {
           />
         ))}
       </div>
+
+      {/* Show click count compared to required clicks */}
+      <p>
+        Clicked: {clickCount} / {requiredClicks} times
+      </p>
+
       <button onClick={startGame} disabled={!isGameOver && gameSequence.length > 0}>
-        Start Game
+        Start New Game
       </button>
     </div>
   );
